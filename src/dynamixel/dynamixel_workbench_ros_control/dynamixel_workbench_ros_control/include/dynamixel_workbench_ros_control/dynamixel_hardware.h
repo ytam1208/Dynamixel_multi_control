@@ -39,6 +39,9 @@
 // SYNC_READ_HANDLER(Only for Protocol 2.0)
 #define SYNC_READ_HANDLER_FOR_PRESENT_POSITION_VELOCITY_CURRENT 0
 
+// Ros service msg
+#include <dynamixel_workbench_msgs/DynamixelCommand.h>
+
 namespace dynamixel_workbench_ros_control
 {
 
@@ -76,6 +79,10 @@ private:
   std::vector<Joint> joints_;
 
   // Parameters
+  uint8_t service_id;
+  int32_t service_value;
+  std::string service_command = "Goal_Position";
+
   // bool is_moving_;
   bool is_first_;
 
@@ -98,9 +105,12 @@ private:
   // sensor_msgs::JointState joint_state_msg_;
   std::vector<WayPoint> pre_goal_; // WayPoint is declared as an original struct
 
+  ros::ServiceServer dynamixel_command_server_;
+  
   void initializeDynamixelHardware();
   void initializeJoints();
   void registerControlInterfaces();
+  void initServer();
 
 public:
   DynamixelHardware(ros::NodeHandle nh, ros::NodeHandle private_nh, double target_control_freq);
@@ -113,9 +123,11 @@ public:
   bool initControlItems(void);
   bool initSDKHandlers(void);
   bool getPresentPosition(std::vector<std::string> dxl_name);
-
+  bool dynamixelCommandMsgCallback(dynamixel_workbench_msgs::DynamixelCommand::Request &req,
+                                    dynamixel_workbench_msgs::DynamixelCommand::Response &res);
   void read();
   void write();
+  //bool write(uint8_t service_input_id, std::string service_item_name, int32_t service_value);
 
 };
 

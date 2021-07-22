@@ -32,6 +32,7 @@ namespace dynamixel_workbench_ros_control
   {
     initializeDynamixelHardware();
     registerControlInterfaces();
+    initServer();
   }
 
   DynamixelHardware::~DynamixelHardware() {}
@@ -483,7 +484,7 @@ namespace dynamixel_workbench_ros_control
             joints_[id_array[index]-1].velocity = dxl_wb_->convertValue2Velocity((uint8_t)id_array[index], (int32_t)get_velocity[index]);
             // joints_[index].current = get_current[index];
             
-            std::cout << (int)index << " " << joints_[id_array[index]-1].position << std::endl;
+            std::cout << "                                                             " << (int)index << " " << (int32_t)get_position[index] << std::endl;
 
             if (strcmp(dxl_wb_->getModelName((uint8_t)id_array[index]), "XL-320") == 0)
               joints_[id_array[index]-1].effort = dxl_wb_->convertValue2Load((int16_t)get_current[index]);
@@ -531,7 +532,6 @@ namespace dynamixel_workbench_ros_control
 
     uint8_t id_array[dynamixel_.size()];
     uint8_t id_cnt = 0;
-
     int32_t dynamixel_position[dynamixel_.size()];
 
     for (auto const& dxl:dynamixel_)
@@ -542,23 +542,58 @@ namespace dynamixel_workbench_ros_control
 
     if (is_first_ == true)
       {
-        ROS_INFO("First write.");
+        ROS_INFO("Dynamixel initalize write.");
         for (uint8_t index = 0; index < id_cnt; index++)
-          dynamixel_position[index] = dxl_wb_->convertRadian2Value(id_array[index], joints_[id_array[index]-1].position);
+          dynamixel_position[index] = dxl_wb_->convertRadian2Value(id_array[index], joints_[id_array[index]-1].position_command);
 
         is_first_ = false;
       }
     else
       {
         for (uint8_t index = 0; index < id_cnt; index++)
-          dynamixel_position[index] = dxl_wb_->convertRadian2Value(id_array[index], joints_[id_array[index]-1].position_command);
+        {
+          if(id_array[index] == service_id)
+              dynamixel_position[index] = service_value;
+          else
+            dynamixel_position[index] = dxl_wb_->convertRadian2Value(id_array[index], joints_[id_array[index]-1].position);
+        }
       }
 
     result = dxl_wb_->syncWrite(SYNC_WRITE_HANDLER_FOR_GOAL_POSITION, id_array, id_cnt, dynamixel_position, 1, &log);
+
     if (result == false)
       {
         ROS_ERROR("%s", log);
       }
   }
+  
+  void DynamixelHardware::initServer()
+  {
+    dynamixel_command_server_ = nh_.advertiseService("dynamixel_command", &DynamixelHardware::dynamixelCommandMsgCallback, this);
+  }
 
+  bool DynamixelHardware::dynamixelCommandMsgCallback(dynamixel_workbench_msgs::DynamixelCommand::Request &req,
+                                                      dynamixel_workbench_msgs::DynamixelCommand::Response &res)
+  {
+    bool result = false;
+    const char* log;
+
+    service_id = req.id;
+    service_command = req.addr_name;
+    service_value = req.value;
+
+    if(service_value >= 0)
+    {
+      result = true;
+    }
+    else if (result == false)
+    {
+      ROS_ERROR("%s", log);
+      ROS_ERROR("Failed to write value[%d] on items[%s] to Dynamixel[ID : %d]", (int)service_value, service_command, (int)service_id);
+    }
+  
+    res.comm_result = result;
+    return true;
+  }
+  
 } // namespace dynamixel_workbench_ros_control
