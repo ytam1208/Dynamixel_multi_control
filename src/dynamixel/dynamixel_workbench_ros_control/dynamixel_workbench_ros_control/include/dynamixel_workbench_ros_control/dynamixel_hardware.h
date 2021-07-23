@@ -81,7 +81,7 @@ private:
   // Parameters
   uint8_t service_id;
   int32_t service_value;
-  std::string service_command = "Goal_Position";
+  std::string service_command;
 
   // bool is_moving_;
   bool is_first_;

@@ -484,7 +484,7 @@ namespace dynamixel_workbench_ros_control
             joints_[id_array[index]-1].velocity = dxl_wb_->convertValue2Velocity((uint8_t)id_array[index], (int32_t)get_velocity[index]);
             // joints_[index].current = get_current[index];
             
-            std::cout << "                                                             " << (int)index << " " << (int32_t)get_position[index] << std::endl;
+            // std::cout << "                                                             " << (int)index << " " << (int32_t)get_position[index] << std::endl;
 
             if (strcmp(dxl_wb_->getModelName((uint8_t)id_array[index]), "XL-320") == 0)
               joints_[id_array[index]-1].effort = dxl_wb_->convertValue2Load((int16_t)get_current[index]);
@@ -558,18 +558,20 @@ namespace dynamixel_workbench_ros_control
             dynamixel_position[index] = dxl_wb_->convertRadian2Value(id_array[index], joints_[id_array[index]-1].position);
         }
       }
+    std::cout << "id = " << (int)service_id << " " << "command = " << service_command << " " << "value = " << (int)service_value << std::endl;
+    // result = dxl_wb_->syncWrite(SYNC_WRITE_HANDLER_FOR_GOAL_POSITION, id_array, id_cnt, dynamixel_position, 1, &log);
+    result = dxl_wb_->itemWrite(service_id, service_command.c_str(), service_value, &log);
 
-    result = dxl_wb_->syncWrite(SYNC_WRITE_HANDLER_FOR_GOAL_POSITION, id_array, id_cnt, dynamixel_position, 1, &log);
-
-    if (result == false)
-      {
-        ROS_ERROR("%s", log);
-      }
+    if(result == false)
+    {
+      ROS_ERROR("%s", log);
+    }
   }
   
   void DynamixelHardware::initServer()
   {
     dynamixel_command_server_ = nh_.advertiseService("dynamixel_command", &DynamixelHardware::dynamixelCommandMsgCallback, this);
+    ROS_INFO("Dynamixel server Open!");
   }
 
   bool DynamixelHardware::dynamixelCommandMsgCallback(dynamixel_workbench_msgs::DynamixelCommand::Request &req,
@@ -582,11 +584,11 @@ namespace dynamixel_workbench_ros_control
     service_command = req.addr_name;
     service_value = req.value;
 
+    // result = dxl_wb_->itemWrite(service_id, service_command.c_str(), service_value, &log);
     if(service_value >= 0)
-    {
       result = true;
-    }
-    else if (result == false)
+
+    if (result == false)
     {
       ROS_ERROR("%s", log);
       ROS_ERROR("Failed to write value[%d] on items[%s] to Dynamixel[ID : %d]", (int)service_value, service_command, (int)service_id);
