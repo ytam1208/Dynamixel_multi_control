@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/cona/Dynamixel_multi_control/devel_isolated/dynamixel_workbench_msgs/include/**",
+                "/home/cona/Dynamixel_multi_control/devel_isolated/dynamixel_sdk_examples/include/**",
+                "/home/cona/Dynamixel_multi_control/devel_isolated/controller_manager_msgs/include/**",
+                "/home/cona/cona_msgs/devel/include/**",
+                "/opt/ros/kinetic/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/ros_control/combined_robot_hw/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/ros_control/combined_robot_hw_tests/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/ros_control/controller_interface/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/ros_control/controller_manager/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/ros_control/controller_manager_tests/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/DynamixelSDK/ros/dynamixel_sdk/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/dynamixel_workbench_ros_control/dynamixel_workbench_ros_control/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/dynamixel_workbench_toolbox/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/ros_control/hardware_interface/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/ros_control/joint_limits_interface/include/**",
+                "/home/cona/Dynamixel_multi_control/src/dynamixel/ros_control/transmission_interface/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

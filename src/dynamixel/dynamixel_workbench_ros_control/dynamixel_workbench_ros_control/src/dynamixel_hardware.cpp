@@ -484,8 +484,6 @@ namespace dynamixel_workbench_ros_control
             joints_[id_array[index]-1].velocity = dxl_wb_->convertValue2Velocity((uint8_t)id_array[index], (int32_t)get_velocity[index]);
             // joints_[index].current = get_current[index];
             
-            std::cout << "                                                             " << (int)index << " " << (int32_t)get_position[index] << std::endl;
-
             if (strcmp(dxl_wb_->getModelName((uint8_t)id_array[index]), "XL-320") == 0)
               joints_[id_array[index]-1].effort = dxl_wb_->convertValue2Load((int16_t)get_current[index]);
             else
@@ -569,7 +567,7 @@ namespace dynamixel_workbench_ros_control
   
   void DynamixelHardware::initServer()
   {
-    dynamixel_command_server_ = nh_.advertiseService("dynamixel_command", &DynamixelHardware::dynamixelCommandMsgCallback, this);
+    dynamixel_command_server_ = nh_.advertiseService("/dynamixel_workbench/dynamixel_command", &DynamixelHardware::dynamixelCommandMsgCallback, this);
   }
 
   bool DynamixelHardware::dynamixelCommandMsgCallback(dynamixel_workbench_msgs::DynamixelCommand::Request &req,
@@ -581,6 +579,8 @@ namespace dynamixel_workbench_ros_control
     service_id = req.id;
     service_command = req.addr_name;
     service_value = req.value;
+
+    std::cout << "Ssrvice_value = " << service_value << std::endl;
 
     if(service_value >= 0)
     {

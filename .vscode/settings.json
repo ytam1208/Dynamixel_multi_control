@@ -58,6 +58,21 @@
 		"cfenv": "cpp",
 		"cinttypes": "cpp",
 		"typeindex": "cpp",
-		"typeinfo": "cpp"
-	}
+		"typeinfo": "cpp",
+		"unordered_set": "cpp",
+		"hash_map": "cpp",
+		"hash_set": "cpp",
+		"mutex": "cpp"
+	},
+	"python.autoComplete.extraPaths": [
+		"/home/cona/Dynamixel_multi_control/devel_isolated/rqt_controller_manager/lib/python2.7/dist-packages",
+		"/home/cona/Dynamixel_multi_control/devel_isolated/controller_manager_tests/lib/python2.7/dist-packages",
+		"/home/cona/Dynamixel_multi_control/devel_isolated/controller_manager/lib/python2.7/dist-packages",
+		"/home/cona/Dynamixel_multi_control/devel_isolated/dynamixel_workbench_msgs/lib/python2.7/dist-packages",
+		"/home/cona/Dynamixel_multi_control/devel_isolated/dynamixel_sdk_examples/lib/python2.7/dist-packages",
+		"/home/cona/Dynamixel_multi_control/devel_isolated/dynamixel_sdk/lib/python2.7/dist-packages",
+		"/home/cona/Dynamixel_multi_control/devel_isolated/controller_manager_msgs/lib/python2.7/dist-packages",
+		"/home/cona/cona_msgs/devel/lib/python2.7/dist-packages",
+		"/opt/ros/kinetic/lib/python2.7/dist-packages"
+	]
 }
